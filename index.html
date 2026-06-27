@@ -1321,6 +1321,17 @@ window.addEventListener('scroll',()=>{
     el.style.transform=`translateY(${sy*.03}px) scale(1.06)`;
   });
 },{ passive:true });
+
+  // Brief logo reveal
+  const cardObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
+  }, {threshold: 0.15});
+  document.querySelectorAll('.project-card').forEach(c => cardObs.observe(c));
+  // Trigger immediately for already-visible cards
+  setTimeout(() => document.querySelectorAll('.project-card').forEach(c => {
+    const r = c.getBoundingClientRect();
+    if(r.top < window.innerHeight) c.classList.add('is-visible');
+  }), 100);
 </script>
 </body>
 </html>
