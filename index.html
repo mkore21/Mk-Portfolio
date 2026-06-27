@@ -1322,16 +1322,24 @@ window.addEventListener('scroll',()=>{
   });
 },{ passive:true });
 
-  // Brief logo reveal
-  const cardObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
-  }, {threshold: 0.15});
-  document.querySelectorAll('.project-card').forEach(c => cardObs.observe(c));
-  // Trigger immediately for already-visible cards
-  setTimeout(() => document.querySelectorAll('.project-card').forEach(c => {
-    const r = c.getBoundingClientRect();
-    if(r.top < window.innerHeight) c.classList.add('is-visible');
-  }), 100);
+  // Brief logo — trigger on scroll + immediately for cards already in view
+  (function() {
+    function revealCards() {
+      document.querySelectorAll('.project-card').forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        if (r.top < window.innerHeight * 1.1) c.classList.add('is-visible');
+      });
+    }
+    // Run on load
+    window.addEventListener('load', function() {
+      setTimeout(revealCards, 80);
+    });
+    // Run on scroll
+    window.addEventListener('scroll', revealCards, { passive: true });
+    // Fallback
+    setTimeout(revealCards, 300);
+  })();
+
 </script>
 </body>
 </html>
